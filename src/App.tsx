@@ -15,22 +15,30 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
+enum SortEnum {
+  None = '',
+  Alpha = 'alpha',
+  Length = 'len',
+}
+
 export const App: React.FC = () => {
-  const [sortType, setSortType] = useState('');
-  const [isReversed, setIsReversed] = useState(false);
-  const sort = () => setSortType(sortType === 'alpha' ? '' : 'alpha');
-  const sortLen = () => setSortType(sortType === 'len' ? '' : 'len');
+  const [sortType, setSortType] = useState<SortEnum>(SortEnum.None);
+  const [isReversed, setIsReversed] = useState<boolean>(false);
+  const sort = () =>
+    setSortType(sortType === SortEnum.Alpha ? SortEnum.None : SortEnum.Alpha);
+  const sortLen = () =>
+    setSortType(sortType === SortEnum.Length ? SortEnum.None : SortEnum.Length);
   const reverse = () => setIsReversed(!isReversed);
   const reset = () => {
-    setSortType('');
+    setSortType(SortEnum.None);
     setIsReversed(false);
   };
 
   const sortedList = [...goodsFromServer];
 
-  if (sortType === 'alpha') {
+  if (sortType === SortEnum.Alpha) {
     sortedList.sort((a, b) => a.localeCompare(b));
-  } else if (sortType === 'len') {
+  } else if (sortType === SortEnum.Length) {
     sortedList.sort((a, b) => a.length - b.length);
   }
 
@@ -43,7 +51,7 @@ export const App: React.FC = () => {
       <div className="buttons">
         <button
           type="button"
-          className={`button is-info ${sortType !== 'alpha' ? 'is-light' : ''}`}
+          className={`button is-info ${sortType !== SortEnum.Alpha ? 'is-light' : ''}`}
           onClick={sort}
         >
           Sort alphabetically
@@ -51,7 +59,7 @@ export const App: React.FC = () => {
 
         <button
           type="button"
-          className={`button is-success ${sortType !== 'len' ? 'is-light' : ''}`}
+          className={`button is-success ${sortType !== SortEnum.Length ? 'is-light' : ''}`}
           onClick={sortLen}
         >
           Sort by length
@@ -65,7 +73,7 @@ export const App: React.FC = () => {
           Reverse
         </button>
 
-        {sortType !== '' || isReversed ? (
+        {sortType !== SortEnum.None || isReversed ? (
           <button
             type="button"
             className="button is-danger is-light"
