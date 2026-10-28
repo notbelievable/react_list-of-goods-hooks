@@ -15,30 +15,30 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
-enum SortEnum {
+enum SortType {
   None = '',
   Alpha = 'alpha',
   Length = 'len',
 }
 
 export const App: React.FC = () => {
-  const [sortType, setSortType] = useState<SortEnum>(SortEnum.None);
+  const [sortType, setSortType] = useState<SortType>(SortType.None);
   const [isReversed, setIsReversed] = useState<boolean>(false);
   const sort = () =>
-    setSortType(sortType === SortEnum.Alpha ? SortEnum.None : SortEnum.Alpha);
+    setSortType(sortType === SortType.Alpha ? SortType.None : SortType.Alpha);
   const sortLen = () =>
-    setSortType(sortType === SortEnum.Length ? SortEnum.None : SortEnum.Length);
+    setSortType(sortType === SortType.Length ? SortType.None : SortType.Length);
   const reverse = () => setIsReversed(!isReversed);
   const reset = () => {
-    setSortType(SortEnum.None);
+    setSortType(SortType.None);
     setIsReversed(false);
   };
 
   const sortedList = [...goodsFromServer];
 
-  if (sortType === SortEnum.Alpha) {
+  if (sortType === SortType.Alpha) {
     sortedList.sort((a, b) => a.localeCompare(b));
-  } else if (sortType === SortEnum.Length) {
+  } else if (sortType === SortType.Length) {
     sortedList.sort((a, b) => a.length - b.length);
   }
 
@@ -51,7 +51,7 @@ export const App: React.FC = () => {
       <div className="buttons">
         <button
           type="button"
-          className={`button is-info ${sortType !== SortEnum.Alpha ? 'is-light' : ''}`}
+          className={`button is-info ${sortType !== SortType.Alpha ? 'is-light' : ''}`}
           onClick={sort}
         >
           Sort alphabetically
@@ -59,7 +59,7 @@ export const App: React.FC = () => {
 
         <button
           type="button"
-          className={`button is-success ${sortType !== SortEnum.Length ? 'is-light' : ''}`}
+          className={`button is-success ${sortType !== SortType.Length ? 'is-light' : ''}`}
           onClick={sortLen}
         >
           Sort by length
@@ -73,7 +73,7 @@ export const App: React.FC = () => {
           Reverse
         </button>
 
-        {sortType !== SortEnum.None || isReversed ? (
+        {sortType !== SortType.None || isReversed ? (
           <button
             type="button"
             className="button is-danger is-light"
@@ -85,13 +85,11 @@ export const App: React.FC = () => {
       </div>
 
       <ul>
-        <ul>
-          {sortedList.map((product, i) => (
-            <li data-cy="Good" key={i}>
-              {product}
-            </li>
-          ))}
-        </ul>
+        {sortedList.map((product, i) => (
+          <li data-cy="Good" key={i}>
+            {product}
+          </li>
+        ))}
       </ul>
     </div>
   );
